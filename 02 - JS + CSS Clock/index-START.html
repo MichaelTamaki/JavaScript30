@@ -61,12 +61,44 @@
       background:black;
       position: absolute;
       top:50%;
+      right:50%;
+      transform-origin: 100%;
+      transform: rotate(90deg);
+      /*transition: 0.05s;*/
+      /*transition-timing-function: cubic-bezier(0.68, -0.55, 0.27, 1.55);*/
+    }
+
+    .hour-hand {
+      width: 20%;
+    }
+
+    .min-hand {
+      width: 50%;
+    }
+
+    .second-hand{
+      width: 40%;
     }
 
   </style>
 
   <script>
+  const hourhand = document.querySelector('.hour-hand');
+  const minutehand = document.querySelector('.min-hand');
+  const secondhand = document.querySelector('.second-hand');
 
+  function updateTime() {
+    const now = new Date();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const second = now.getSeconds();
+
+    secondhand.style.transform = `rotate(${90 + second * 6}deg)`;
+    minutehand.style.transform = `rotate(${90 + minute * 6}deg)`;
+    hourhand.style.transform = `rotate(${90 + hour * 30}deg)`;
+  }
+
+  setInterval(updateTime, 1000);
 
   </script>
 </body>
