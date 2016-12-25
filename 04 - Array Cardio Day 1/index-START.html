@@ -31,28 +31,74 @@
 
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+    function checkFifteen(inventor) {
+      return (inventor.year >= 1500 && inventor.year < 1600);
+    }
+    const fifteen = inventors.filter(checkFifteen);
+    console.log(fifteen);
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors' first and last names
+    function mapName(inventor) {
+      return inventor.first + " " + inventor.last;
+    }
+    const inventorNames = inventors.map(mapName);
+    console.log(inventorNames);
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+    function compareBirth(a, b) {
+      return a.year - b.year;
+    }
+    const sortedBirth = inventors.sort(compareBirth);
+    console.log(sortedBirth);
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live?
+    function reduceYears(sum, inventor) {
+      return sum + (inventor.passed - inventor.year);
+    }
+    const totalYears = inventors.reduce(reduceYears, 0);
+    console.log(totalYears);
 
     // 5. Sort the inventors by years lived
+    function compareYears(a, b) {
+      return (a.passed - a.year) - (b.passed - b.year);
+    }
+    const yearsLived = inventors.sort(compareYears);
+    console.log(yearsLived);
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
+    // const wrapper = document.querySelector(".mw-category");    
+    // const links = Array.prototype.slice.call(wrapper.querySelectorAll("a"));
+    // const boulevardNames = links.map(link => link.textContent);
+    // const de = boulevardNames.filter(name => name.includes("de"));
+    // console.log(de);
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
+    function compareLast(a, b) {
+      const lasta = a.split(", ")[0];
+      const lastb = b.split(", ")[0];
+      return lasta.localeCompare(lastb);
+    }
+    const sortedLast = people.sort(compareLast);
+    console.log(sortedLast);
 
     // 8. Reduce Exercise
     // Sum up the instances of each of these
     const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    function sumWords(obj, word) {
+      if (obj[word] == null) {
+        obj[word] = 1;
+      } else {
+        obj[word] += 1;
+      }
+      return obj;
+    }
+    const sumInstances = data.reduce(sumWords, {});
+    console.log(sumInstances);
 
   </script>
 </body>
