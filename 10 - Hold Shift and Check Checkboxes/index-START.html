@@ -104,6 +104,42 @@
   </div>
 
 <script>
+const checkboxes = Array.prototype.slice.call(document.querySelectorAll("[type=checkbox]"));
+let shiftDown = false;
+let lastChecked = null;
+
+function checkBetween() {
+  if (!shiftDown) {
+    lastChecked = checkboxes.indexOf(this);
+    return;
+  }
+  else if (lastChecked == null) {
+    lastChecked = checkboxes.indexOf(this);
+    return;
+  }
+
+  let index = checkboxes.indexOf(this);
+  let toCheck = this.checked;
+
+  for (i = Math.min(lastChecked, index); i <= Math.max(lastChecked, index); i++) {
+    checkboxes[i].checked = toCheck;
+  }
+
+  lastChecked = null;
+}
+
+checkboxes.forEach(box => box.addEventListener("click", checkBetween));
+
+function shiftTrue(e) {
+  if (e.key == "Shift") shiftDown = true;
+}
+
+function shiftFalse(e) {
+  if (e.key == "Shift") shiftDown = false;
+}
+
+window.addEventListener("keydown", shiftTrue);
+window.addEventListener("keyup", shiftFalse);
 </script>
 </body>
 </html>
