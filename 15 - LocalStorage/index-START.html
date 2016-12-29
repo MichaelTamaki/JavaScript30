@@ -23,12 +23,54 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <button id="delete">Delete All</button>
   </div>
 
 <script>
-  const addItems = document.querySelector('.add-items');
-  const itemsList = document.querySelector('.plates');
-  const items = [];
+  var addItems = document.querySelector('.add-items');
+  var itemsList = document.querySelector('.plates');
+  var items = JSON.parse(localStorage.getItem('items')) || [];
+  var deleteBtn = document.getElementById('delete');
+
+  function submitItem(e) {
+    e.preventDefault();
+    const txt = this.querySelector('[name=item]').value;
+    const item = {
+      text: txt,
+      done: false
+    };
+    this.reset();
+    items.push(item);
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  function populateList(plates = [], platesList) {
+    platesList.innerHTML = plates.map((plate, i) => {
+      return `
+        <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ''}>
+          <label for="item${i}">${plate.text}</label>
+        </li>
+      `
+    }).join('');
+  }
+
+  function toggleItem(e) {
+    if (!e.target.matches('input')) return;
+    items[e.target.dataset.index].done = !items[e.target.dataset.index].done;
+    localStorage.setItem('items', JSON.stringify(items));
+    populateList(items, itemsList);
+  }
+
+  addItems.addEventListener('submit', submitItem);
+  populateList(items, itemsList);
+  itemsList.addEventListener('click', toggleItem);
+  deleteBtn.addEventListener('click', () => {
+    localStorage.removeItem('items');
+    items = [];
+    populateList(items, itemsList);
+  });
 
 </script>
 
