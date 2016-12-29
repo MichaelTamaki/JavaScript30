@@ -7,6 +7,18 @@
 </head>
 <body>
 <script>
+const secretCode = 'michael';
+let seq = [];
+function updateSeq(e) {
+	let key = e.key;
+	seq.push(key);
+	seq = seq.slice(-secretCode.length);
+	if (seq.join('') == secretCode) {
+		cornify_add();
+	}
+}
+
+window.addEventListener("keyup", updateSeq);
 </script>
 </body>
 </html>
