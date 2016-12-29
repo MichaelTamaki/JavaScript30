@@ -58,6 +58,35 @@
       };
     }
 
+    function checkSlide(e) {
+      let windowTop = window.scrollY;
+      let windowBot = windowTop + window.innerHeight;
+      images.forEach(image => {
+        let imageTop = image.offsetTop;
+        let imageBot = imageTop + image.height;
+        let seeTop = imageTop > windowTop && imageTop < windowBot;
+        let seeBot = imageBot > windowTop && imageBot < windowBot;
+        if (seeTop || seeBot) {
+          image.classList.add('active');
+        }
+        else {
+          image.classList.remove('active');
+        }
+      });
+    }
+
+    let ticking = false;
+    const images = document.querySelectorAll('.slide-in');
+    window.addEventListener('scroll', e => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          checkSlide(e);
+          ticking = false;
+        });
+      }
+      ticking = true;
+    });
+
   </script>
 
   <style>
