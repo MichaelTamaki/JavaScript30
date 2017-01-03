@@ -5,12 +5,54 @@
   <title>Speech Detection</title>
 </head>
 <body>
-
+  <h1 id="status">Ready</h1>
+  <button type="button" id="start">Start</button> 
   <div class="words" contenteditable>
+    <p id="speech"></p>
   </div>
 
 <script>
   window.SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const recognition = new SpeechRecognition();
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.maxAlternatives = 1;
+
+  const status = document.querySelector('#status');
+  const start = document.querySelector('#start');
+  const words = document.querySelector('.words');
+  const speech = words.querySelector('#speech');
+
+  start.addEventListener('click', () => {
+    if (start.classList.contains('disable')) {
+      start.classList.remove('disable');
+      start.innerHTML = 'Start';
+      status.innerHTML = 'Ready';
+      recognition.stop();
+      return;
+    }
+    start.classList.add('disable');
+    start.innerHTML = 'Stop';
+    status.innerHTML = 'Receiving';
+    recognition.start();
+  });
+
+  recognition.addEventListener('speechstart', () => {
+    speech.innerHTML = '';
+    spoken = '';
+  });
+
+  recognition.addEventListener('result', (e) => {
+    var newWords = e.results.map(word => word[0].transcript);
+    speech.innerHTML += ' ' + newWords.join(' ');
+  });
+
+  recognition.addEventListener('speechend', () => {
+    recognition.stop();
+    start.classList.remove('disable');
+    start.innerHTML = 'Start';
+    status.innerHTML = 'Ready';
+  })
 
 
 </script>
@@ -26,6 +68,20 @@
       font-family: 'helvetica neue';
       font-weight: 200;
       font-size: 20px;
+    }
+
+    button {
+      opacity: 1.0;
+      cursor: allowed;
+      background-color: purple;
+      border: none;
+      color: white;
+      text-align: center;
+      padding: 10px;
+    }
+
+    button.disable {
+      background-color: red;
     }
 
     .words {
