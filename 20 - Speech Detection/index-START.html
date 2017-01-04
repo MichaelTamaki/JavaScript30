@@ -8,7 +8,6 @@
   <h1 id="status">Ready</h1>
   <button type="button" id="start">Start</button> 
   <div class="words" contenteditable>
-    <p id="speech"></p>
   </div>
 
 <script>
@@ -22,6 +21,8 @@
   const start = document.querySelector('#start');
   const words = document.querySelector('.words');
   const speech = words.querySelector('#speech');
+  let p = document.createElement('p');
+  words.appendChild(p);
 
   start.addEventListener('click', () => {
     if (start.classList.contains('disable')) {
@@ -37,22 +38,25 @@
     recognition.start();
   });
 
-  recognition.addEventListener('speechstart', () => {
-    speech.innerHTML = '';
-    spoken = '';
-  });
+  // recognition.addEventListener('speechstart', () => {
+  //   speech.innerHTML = '';
+  //   spoken = '';
+  // });
 
   recognition.addEventListener('result', (e) => {
-    var newWords = e.results.map(word => word[0].transcript);
-    speech.innerHTML += ' ' + newWords.join(' ');
+    var newWords = Array.from(e.results).map(word => word[0].transcript).join('');
+    p.textContent = newWords;
+    if (e.results[0].isFinal) {
+      p = document.createElement('p');
+      words.appendChild(p);
+    }
   });
 
-  recognition.addEventListener('speechend', () => {
-    recognition.stop();
-    start.classList.remove('disable');
-    start.innerHTML = 'Start';
-    status.innerHTML = 'Ready';
-  })
+  recognition.addEventListener('end', () => {
+    if (start.classList.contains('disable')) {
+      recognition.start();
+    }
+  });
 
 
 </script>

@@ -31,7 +31,9 @@
       if (e.results[0].isFinal) {
         p = document.createElement('p');
         words.appendChild(p);
+        console.count('New p element');
       }
+      console.log(transcript);
   });
 
   recognition.addEventListener('end', recognition.start);
