@@ -30,11 +30,49 @@
 
 <script>
   const msg = new SpeechSynthesisUtterance();
-  let voices = [];
+  var voices = null;
   const voicesDropdown = document.querySelector('[name="voice"]');
   const options = document.querySelectorAll('[type="range"], [name="text"]');
   const speakButton = document.querySelector('#speak');
   const stopButton = document.querySelector('#stop');
+
+
+  function populateVoices() {
+    voices = window.speechSynthesis.getVoices();
+
+    for (i = 0; i < voices.length; i++) {
+      var option = document.createElement('option');
+      option.textContent = `${voices[i].name} (${voices[i].lang})`;
+      voicesDropdown.appendChild(option);
+    }
+  }
+
+  function setVoice() {
+    var voice = voices[this.selectedIndex - 1];
+    msg.voice = voice;
+    stop();
+  }
+
+  function updateRange() {
+    msg[this.name] = this.value;
+    stop();
+  }
+
+  function speak() {
+    stop();
+    msg.text = options[2].value;
+    window.speechSynthesis.speak(msg);
+  }
+
+  function stop() {
+    window.speechSynthesis.cancel();
+  }
+
+  speechSynthesis.addEventListener('voiceschanged', populateVoices);
+  voicesDropdown.addEventListener('change', setVoice);
+  options.forEach(range => range.addEventListener('change', updateRange));
+  speakButton.addEventListener('click', speak);
+  stopButton.addEventListener('click', stop);
 </script>
 
 </body>
